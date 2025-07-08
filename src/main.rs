@@ -33,7 +33,7 @@ fn main() {
         // Uncomment this block to pass the first stage
         let encoded_value = &args[2];
         let decoded_value = decode_bencoded_value(encoded_value);
-        print!("{}", decoded_value.to_string());
+        println!("{}", decoded_value.to_string());
     } else {
         println!("unknown command: {}", args[1])
     }
