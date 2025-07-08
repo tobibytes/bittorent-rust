@@ -7,7 +7,7 @@ use std::env;
 #[allow(dead_code)]
 fn decode_bencoded_value(encoded_value: &str) -> String {
     // If encoded_value starts with a digit, it's a number
-    let mut result = String::new();
+    let mut result = String::from("\\\"");
     if encoded_value.chars().next().unwrap().is_digit(10) {
         // Example: "5:hello" -> "hello"
         let colon_index = encoded_value.find(':').unwrap();
@@ -21,7 +21,7 @@ fn decode_bencoded_value(encoded_value: &str) -> String {
         result.push_str(decoded_value);
         // panic!("Unhandled encoded value: {}", encoded_value)
     }
-    result.push_str("\n");
+    result.push_str("\\\"\n");
     result
     
 }
