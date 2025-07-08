@@ -15,7 +15,6 @@ fn decode_bencoded_value(encoded_value: &str) -> serde_json::Value {
         let string = &encoded_value[colon_index + 1..colon_index + 1 + number];
         return serde_json::Value::String(string.to_string());
     } else {
-        print!("{}\n", encoded_value);
         return serde_json::Value::String(encoded_value[1..encoded_value.len()-1].to_string());
         // panic!("Unhandled encoded value: {}", encoded_value)
     }
