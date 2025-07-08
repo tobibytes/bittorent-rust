@@ -21,7 +21,7 @@ fn decode_bencoded_value(encoded_value: &str) -> String {
         result.push_str(decoded_value);
         // panic!("Unhandled encoded value: {}", encoded_value)
     }
-    result.push_str("\\\"\n");
+    result.push_str("\"\n");
     result
     
 }
