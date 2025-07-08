@@ -37,9 +37,9 @@ fn main() {
 
         // Uncomment this block to pass the first stage
         let encoded_value = &args[2];
-        let decoded_value: serde_bencode::value::Value = from_str(&encoded_value.to_string()).unwrap();
+        let decoded_value: String = from_str(&encoded_value.to_string()).unwrap();
         // let decoded_value = decode_bencoded_value(encoded_value);
-        print!("{:?}\n", decoded_value);
+        print!("{}\n", decoded_value);
     } else {
         println!("unknown command: {}", args[1])
     }
