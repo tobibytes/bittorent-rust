@@ -39,7 +39,7 @@ fn main() {
         let encoded_value = &args[2];
         let decoded_value: serde_json::Value = from_str(&encoded_value.to_string()).unwrap();
         // let decoded_value = decode_bencoded_value(encoded_value);
-        print!("{}", decoded_value.to_string());
+        print!("{}\n", decoded_value.to_string());
     } else {
         println!("unknown command: {}", args[1])
     }
