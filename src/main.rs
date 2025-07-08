@@ -1,7 +1,7 @@
 use serde_json;
 use std::env;
 use serde_derive::{Serialize, Deserialize};
-use serde_bencode::{self, from_str};
+use serde_bencode::{self};
 
 
 #[derive(Debug, Deserialize, Serialize)]
