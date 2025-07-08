@@ -7,21 +7,21 @@ use std::env;
 #[allow(dead_code)]
 fn decode_bencoded_value(encoded_value: &str) -> String {
     // If encoded_value starts with a digit, it's a number
-    if encoded_value.chars().next().unwrap().is_digit(10) {
-        // Example: "5:hello" -> "hello"
-        let colon_index = encoded_value.find(':').unwrap();
-        let number_string = &encoded_value[..colon_index];
-        let number = number_string.parse::<usize>().unwrap();
-        let string = &encoded_value[colon_index + 1..colon_index + 1 + number];
-        return string.to_string();
-    } else {
+    // if encoded_value.chars().next().unwrap().is_digit(10) {
+    //     // Example: "5:hello" -> "hello"
+    //     let colon_index = encoded_value.find(':').unwrap();
+    //     let number_string = &encoded_value[..colon_index];
+    //     let number = number_string.parse::<usize>().unwrap();
+    //     let string = &encoded_value[colon_index + 1..colon_index + 1 + number];
+    //     return string.to_string();
+    // } else {
         let mut result = String::new();
         let decoded_value = &encoded_value[1..encoded_value.len()-1];
         result.push_str(decoded_value);
         result.push_str("\n");
         return result
         // panic!("Unhandled encoded value: {}", encoded_value)
-    }
+    // }
 }
 
 // Usage: your_program.sh decode "<encoded_value>"
