@@ -15,8 +15,11 @@ fn decode_bencoded_value(encoded_value: &str) -> String {
         let string = &encoded_value[colon_index + 1..colon_index + 1 + number];
         return string.to_string();
     } else {
+        let mut result = String::new();
         let decoded_value = &encoded_value[1..encoded_value.len()-1];
-        return decoded_value.to_string()
+        result.push_str(decoded_value);
+        result.push_str("\n");
+        return result
         // panic!("Unhandled encoded value: {}", encoded_value)
     }
 }
