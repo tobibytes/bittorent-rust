@@ -10,7 +10,7 @@ enum BencodeValue {
     String(String),
     Bytes(Vec<u8>),
     List(Vec<BencodeValue>),
-    Dict(std::collections::BTreeMap<Vec<u8>, BencodeValue>),
+    Dict(std::collections::BTreeMap<String, BencodeValue>),
 }
 #[derive(Debug, Deserialize, Serialize)]
 struct Torrent {
