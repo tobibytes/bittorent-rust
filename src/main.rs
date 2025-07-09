@@ -46,9 +46,9 @@ fn main() {
             let torrent: Torrent = load_torrent_file(file_path).unwrap();
             let serialized_torrent = serde_json::to_string(&torrent.info).unwrap();
             let sha_sf = sha1_smol::Sha1::from(&serialized_torrent).digest().to_string();
-            println!("Tracker URL: {}", torrent.announce);
-            println!("Length: {}", torrent.info.length);
-            println!("Info Hash: {}", sha_sf);
+            // println!("Tracker URL: {}", torrent.announce);
+            // println!("Length: {}", torrent.info.length);
+            print!("Info Hash: {}", sha_sf);
             
             
             
