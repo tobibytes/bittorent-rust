@@ -59,7 +59,8 @@ fn main() {
                     break;
                 }
                 let piece_sha = &torrent.info.pieces[i..i+20];
-                let torrent_piece_sha =sha1_smol::Sha1::from(&piece_sha).digest().to_string();
+                let torrent_piece_sha = hex::encode(piece_sha);
+                // let torrent_piece_sha =sha1_smol::Sha1::from(&piece_sha).digest().to_string();
                 println!("{}", torrent_piece_sha);
                 i += 20;
             };
