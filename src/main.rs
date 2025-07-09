@@ -38,16 +38,15 @@ fn main() {
 
     if command == "decode" {
         eprintln!("Logs from your program will appear here!");
-
         let encoded_value = &args[2];
         let value: BencodeValue = serde_bencode::from_str(encoded_value).unwrap();
         println!("{}", serde_json::to_string(&value).unwrap())
     } 
     else if command == "info" {
         let file_path = &args[2];
-            let decoded_map: Torrent = load_torrent_file(file_path).unwrap();
-
-            println!("{:?}", decoded_map);
+            let torrent: Torrent = load_torrent_file(file_path).unwrap();
+            println!("{}", torrent.announce);
+            println!("{}", torrent.info.length);
         }
     else {
         eprintln!("unknown command: {}", args[1])
