@@ -17,7 +17,6 @@ struct Torrent {
     announce: String,
     info: TorrentInfo
 }
-
 #[derive(Debug, Deserialize, Serialize)]
 struct TorrentInfo {
     length: usize,
@@ -45,8 +44,10 @@ fn main() {
     else if command == "info" {
         let file_path = &args[2];
             let torrent: Torrent = load_torrent_file(file_path).unwrap();
-            println!("Tracker URL: {}", torrent.announce);
-            println!("Length: {}", torrent.info.length);
+            let serialized_torrent = serde_json::to_string(&torrent.info).unwrap();
+            let sha_sf = sha1_smol::Sha1::from(&serialized_torrent).digest().to_string();
+            println!("{}", sha_sf)   
+            
         }
     else {
         eprintln!("unknown command: {}", args[1])
