@@ -1,3 +1,4 @@
+use hex::ToHex;
 use serde_json;
 use std::{env, path::PathBuf};
 use serde_derive::{Serialize, Deserialize};
@@ -44,14 +45,16 @@ fn main() {
     else if command == "info" {
         let file_path = &args[2];
             let torrent: Torrent = load_torrent_file(file_path).unwrap();
-            let serialized_torrent = serde_json::to_string(&torrent.info).unwrap();
+            
+            let serialized_torrent = serde_bencode::to_bytes(&torrent.info).unwrap();
             let sha_sf = sha1_smol::Sha1::from(&serialized_torrent).digest().to_string();
-            // println!("Tracker URL: {}", torrent.announce);
-            // println!("Length: {}", torrent.info.length);
+            println!("Tracker URL: {}", torrent.announce);
+            println!("Length: {}", torrent.info.length);
             print!("Info Hash: {}", sha_sf);
-            
-            
-            
+            // let torrent_info: TorrentInfo =  serde_bencode::to_bytes(&);
+            // println!("{:?}", sha_sf);
+
+
         }
     else {
         eprintln!("unknown command: {}", args[1])
