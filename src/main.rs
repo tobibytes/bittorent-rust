@@ -1,4 +1,3 @@
-use hex::ToHex;
 use serde_json;
 use std::{env, path::PathBuf};
 use serde_derive::{Serialize, Deserialize};
@@ -45,15 +44,24 @@ fn main() {
     else if command == "info" {
         let file_path = &args[2];
             let torrent: Torrent = load_torrent_file(file_path).unwrap();
-            
-            let serialized_torrent = serde_bencode::to_bytes(&torrent.info).unwrap();
-            let sha_sf = sha1_smol::Sha1::from(&serialized_torrent).digest().to_string();
+            // println!("{:?}", torrent);
+            let torrent_info_bytes = serde_bencode::to_bytes(&torrent.info).unwrap();
+            let torrent_info_sha = sha1_smol::Sha1::from(&torrent_info_bytes).digest().to_string();
             println!("Tracker URL: {}", torrent.announce);
             println!("Length: {}", torrent.info.length);
-            print!("Info Hash: {}", sha_sf);
-            // let torrent_info: TorrentInfo =  serde_bencode::to_bytes(&);
-            // println!("{:?}", sha_sf);
-
+            println!("Info Hash: {}", torrent_info_sha);
+            println!("Pieces Hashes:");
+            let mut i = 0;
+            let torrent_pieces_bytes_len = torrent.info.pieces.len();
+            loop {
+                if i >= torrent_pieces_bytes_len {
+                    break;
+                }
+                let piece_sha = &torrent.info.pieces[i..i+20];
+                let torrent_piece_sha =sha1_smol::Sha1::from(&piece_sha).digest().to_string();
+                println!("{}", torrent_piece_sha);
+                i += 20;
+            };
 
         }
     else {
