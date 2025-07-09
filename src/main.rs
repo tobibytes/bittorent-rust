@@ -48,7 +48,7 @@ fn main() {
             let torrent_info_bytes = serde_bencode::to_bytes(&torrent.info).unwrap();
             let torrent_info_sha = sha1_smol::Sha1::from(&torrent_info_bytes).digest().to_string();
             println!("Tracker URL: {}", torrent.announce);
-            println!("Length: {}", torrent.info.length);
+            println!("Piece Length: {}", torrent.info.length);
             println!("Info Hash: {}", torrent_info_sha);
             println!("Pieces Hashes:");
             let mut i = 0;
