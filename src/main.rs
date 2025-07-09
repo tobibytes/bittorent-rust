@@ -44,7 +44,7 @@ fn main() {
     else if command == "info" {
         let file_path = &args[2];
             let torrent: Torrent = load_torrent_file(file_path).unwrap();
-            println!("{:?}", torrent);
+            // println!("{:?}", torrent);
             let torrent_info_bytes = serde_bencode::to_bytes(&torrent.info).unwrap();
             let torrent_info_sha = sha1_smol::Sha1::from(&torrent_info_bytes).digest().to_string();
             println!("Tracker URL: {}", torrent.announce);
