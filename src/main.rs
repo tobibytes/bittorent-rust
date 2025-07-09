@@ -45,8 +45,8 @@ fn main() {
     else if command == "info" {
         let file_path = &args[2];
             let torrent: Torrent = load_torrent_file(file_path).unwrap();
-            println!("{}", torrent.announce);
-            println!("{}", torrent.info.length);
+            println!("Tracker URL: {}", torrent.announce);
+            println!("Length: {}", torrent.info.length);
         }
     else {
         eprintln!("unknown command: {}", args[1])
