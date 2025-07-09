@@ -50,6 +50,7 @@ fn main() {
             println!("Tracker URL: {}", torrent.announce);
             println!("Length: {}", torrent.info.length);
             println!("Info Hash: {}", torrent_info_sha);
+            println!("Pieces Length: {}", torrent.info.piece_length);
             println!("Piece Hashes:");
             let mut i = 0;
             let torrent_pieces_bytes_len = torrent.info.pieces.len();
