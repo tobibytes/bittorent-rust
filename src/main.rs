@@ -80,7 +80,6 @@ fn load_torrent_file<T>(file_path: T) -> anyhow::Result<Torrent> where T: Into<P
 }
 fn get_info(file_path: &str, show_info: bool)-> (String, Vec<u8>, usize){
     let torrent: Torrent = load_torrent_file(file_path).unwrap();
-    // println!("{:?}", torrent);
     let torrent_info_bytes = serde_bencode::to_bytes(&torrent.info).unwrap();
     let torrent_info_sha = sha1_smol::Sha1::from(&torrent_info_bytes).digest().to_string();
     if show_info {
@@ -102,10 +101,15 @@ fn get_info(file_path: &str, show_info: bool)-> (String, Vec<u8>, usize){
             println!("{}", torrent_piece_sha);
         }
 	i += 20;
-};
-(torrent.announce, torrent_info_bytes, torrent.info.length)
+    };
+    (torrent.announce, torrent_info_bytes, torrent.info.length)
 }
 
+fn decode_value(encoded_value: &str) {
+ let value: BencodeValue = serde_bencode::from_str(encoded_value).unwrap();
+ println!("{}\n", serde_json::to_string(&value).unwrap());
+
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -115,13 +119,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match &args[1][..] {
  "decode" => {
         eprintln!("Logs from your program will appear here!");
-
-	fn decode_value(encoded_value: &str) {
- let value: BencodeValue = serde_bencode::from_str(encoded_value).unwrap();
-        println!("{}", serde_json::to_string(&value).unwrap());
-
-}
-               return Ok(());
+        decode_value(&args[2]);
+        return Ok(());
     } 
  "info" => {
         let file_path = &args[2];
