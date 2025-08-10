@@ -99,8 +99,8 @@ fn get_info(file_path: &str, show_info: bool)-> (String, Vec<u8>, usize){
 	let piece_sha = &torrent.info.pieces[i..i+20];
 	let torrent_piece_sha = hex::encode(&piece_sha);
         if show_info {
-        println!("{}", &torrent_peice_sha);
-        };
+            println!("{}", torrent_piece_sha);
+        }
 	i += 20;
 };
 (torrent.announce, torrent_info_bytes, torrent.info.length)
