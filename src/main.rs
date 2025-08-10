@@ -72,6 +72,7 @@ impl<'a> PeersQuery<'a> {
         }
     }
 }
+
 fn load_torrent_file<T>(file_path: T) -> anyhow::Result<Torrent> where T: Into<PathBuf> {
     let content = std::fs::read(file_path.into()).unwrap();
     let torrent: Torrent = serde_bencode::from_bytes(&content).unwrap();
@@ -82,11 +83,11 @@ fn get_info(file_path: &str)-> (String, Vec<u8>, usize){
     // println!("{:?}", torrent);
     let torrent_info_bytes = serde_bencode::to_bytes(&torrent.info).unwrap();
     let torrent_info_sha = sha1_smol::Sha1::from(&torrent_info_bytes).digest().to_string();
-    println!("Tracker URL: {}", torrent.announce);
-    println!("Length: {}", torrent.info.length);
-    println!("Info Hash: {}", torrent_info_sha);
-    println!("Piece Length: {}", torrent.info.piece_length);
-    eprintln!("Piece Hashes:");
+    // println!("Tracker URL: {}", torrent.announce);
+    // println!("Length: {}", torrent.info.length);
+    // println!("Info Hash: {}", torrent_info_sha);
+    // println!("Piece Length: {}", torrent.info.piece_length);
+    // eprintln!("Piece Hashes:");
     let mut i = 0;
     let torrent_pieces_bytes_len = torrent.info.pieces.len();
     loop {
@@ -153,13 +154,11 @@ fn percent_encode_sha1(info_bytes: &[u8]) -> String {
 fn decode_peers(bytes: &[u8]) {
     for chunk in bytes.chunks(6) {
         if chunk.len() < 6 {
-            continue; // skip incomplete peer entry
+            continue;
         }
-
-        // First 4 bytes = IP
+        
         let ip = format!("{}.{}.{}.{}", chunk[0], chunk[1], chunk[2], chunk[3]);
 
-        // Next 2 bytes = port (big-endian)
         let port = u16::from_be_bytes([chunk[4], chunk[5]]);
 
         println!("{}:{}", ip, port);
