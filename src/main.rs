@@ -107,7 +107,7 @@ fn get_info(file_path: &str, show_info: bool)-> (String, Vec<u8>, usize){
 
 fn decode_value(encoded_value: &str) {
  let value: BencodeValue = serde_bencode::from_str(encoded_value).unwrap();
- println!("{}\n", serde_json::to_string(&value).unwrap());
+ println!("{}", serde_json::to_string(&value).unwrap());
 
 }
 
