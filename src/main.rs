@@ -78,16 +78,18 @@ fn load_torrent_file<T>(file_path: T) -> anyhow::Result<Torrent> where T: Into<P
     let torrent: Torrent = serde_bencode::from_bytes(&content).unwrap();
     Ok(torrent)
 }
-fn get_info(file_path: &str)-> (String, Vec<u8>, usize){
+fn get_info(file_path: &str, show_info: bool)-> (String, Vec<u8>, usize){
     let torrent: Torrent = load_torrent_file(file_path).unwrap();
     // println!("{:?}", torrent);
     let torrent_info_bytes = serde_bencode::to_bytes(&torrent.info).unwrap();
     let torrent_info_sha = sha1_smol::Sha1::from(&torrent_info_bytes).digest().to_string();
-//     println!("Tracker URL: {}", torrent.announce);
-//     println!("Length: {}", torrent.info.length);
-//     println!("Info Hash: {}", torrent_info_sha);
-//     println!("Piece Length: {}", torrent.info.piece_length);
-//     eprintln!("Piece Hashes:");
+    if show_info {
+    println!("Tracker URL: {}", torrent.announce);
+    println!("Length: {}", torrent.info.length);
+    println!("Info Hash: {}", torrent_info_sha);
+    println!("Piece Length: {}", torrent.info.piece_length);
+    println!("Piece Hashes:");
+    };
     let mut i = 0;
     let torrent_pieces_bytes_len = torrent.info.pieces.len();
     loop {
@@ -96,7 +98,9 @@ fn get_info(file_path: &str)-> (String, Vec<u8>, usize){
 	}
 	let piece_sha = &torrent.info.pieces[i..i+20];
 	let torrent_piece_sha = hex::encode(&piece_sha);
-
+        if show_info {
+        println!("{}", &torrent_peice_sha);
+        };
 	i += 20;
 };
 (torrent.announce, torrent_info_bytes, torrent.info.length)
@@ -121,12 +125,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     } 
  "info" => {
         let file_path = &args[2];
-	get_info(file_path);
+	get_info(file_path, true);
 	return Ok(());
         } 
 "peers" => {
         let file_path = &args[2];
-        let decoded_torrent_tuple = get_info(file_path);
+        let decoded_torrent_tuple = get_info(file_path, false);
 	    let url = decoded_torrent_tuple.0;
         let info_hash: Vec<u8> = decoded_torrent_tuple.1;
         let encoded_info_hash = percent_encode_sha1(&info_hash);
