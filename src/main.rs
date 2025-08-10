@@ -82,10 +82,10 @@ fn get_info(file_path: &str)-> (String, Vec<u8>, usize){
     // println!("{:?}", torrent);
     let torrent_info_bytes = serde_bencode::to_bytes(&torrent.info).unwrap();
     let torrent_info_sha = sha1_smol::Sha1::from(&torrent_info_bytes).digest().to_string();
-    eprintln!("Tracker URL: {}", torrent.announce);
-    eprintln!("Length: {}", torrent.info.length);
+    println!("Tracker URL: {}", torrent.announce);
+    println!("Length: {}", torrent.info.length);
     println!("Info Hash: {}", torrent_info_sha);
-    eprintln!("Piece Length: {}", torrent.info.piece_length);
+    println!("Piece Length: {}", torrent.info.piece_length);
     eprintln!("Piece Hashes:");
     let mut i = 0;
     let torrent_pieces_bytes_len = torrent.info.pieces.len();
