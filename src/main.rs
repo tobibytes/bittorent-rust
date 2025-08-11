@@ -3,6 +3,7 @@ use std::net::TcpStream;
 use std::io::prelude::*;
 use rand::Rng;
 use tokio;
+use hex;
 use sha1_smol::Sha1;
 use std::{env, path::PathBuf};
 use serde_derive::{Serialize, Deserialize};
@@ -45,11 +46,14 @@ impl Peer {
     fn construct_message(self: &Self, buffer: &mut Vec<u8>, info_hash: &Vec<u8>) {
         let mut rng = rand::thread_rng();
         let rand_arr: [u8;20] = rng.gen();
+        let digest = Sha1::from(info_hash).digest();
+        let digest_bytes = digest.bytes();
+        
         buffer.push(19);   
         buffer.extend_from_slice("BitTorrent protocol".as_bytes());   
         buffer.extend_from_slice(&[0;8]);
-        buffer.extend_from_slice(info_hash);
-        buffer.extend_from_slice(&rand_arr.to_vec());
+        buffer.extend_from_slice(&digest_bytes);
+        buffer.extend_from_slice(&rand_arr);
     }
 }
 
@@ -206,17 +210,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut stream = TcpStream::connect(&peer.address)?;
     let decoded_info = get_info(&file_path, false);
     let mut send_buffer: Vec<u8> = Vec::new();
-    let mut rec_buffer: Vec<u8> = Vec::new();
-    println!("start: {:?}", &send_buffer);
+    let mut rec_buffer: [u8;68] = [0;68];
     peer.construct_message(&mut send_buffer, &decoded_info.1);
-    println!("end: {:?}", &send_buffer);
     stream.write_all(&send_buffer)?;
     stream.flush()?;
     // read
-    let rec_bytes = stream.read_exact(&mut rec_buffer)?;
-    //println!("b: {:?}", rec_bytes);
-    let res = String::from_utf8_lossy(&rec_buffer[..]);
-    println!("Peer ID: {}", res);
+    let rec_bytes = stream.read(&mut rec_buffer)?;
+    let pid = hex::encode(&rec_buffer[48..]);
+    println!("Peer ID: {}", pid);
     return Ok(())
 } 
     _ => {
